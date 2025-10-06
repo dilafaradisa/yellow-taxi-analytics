@@ -17,6 +17,7 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__WEBSERVER__WORKERS: 1
     depends_on:
       - postgres
     volumes:
@@ -28,8 +29,7 @@ services:
     command: standalone
     
   streamlit:
-    # to use by armbian
-    image: python:3.9-slim
+    build: ./streamlit-app
     working_dir: /app
     volumes:
       - ./streamlit-app:/app
@@ -37,5 +37,3 @@ services:
       - "8501:8501"
     depends_on:
       - postgres
-    command: >
-      sh -c "pip install streamlit pandas sqlalchemy psycopg2-binary && streamlit run dashboard.py --server.address=0.0.0.0"

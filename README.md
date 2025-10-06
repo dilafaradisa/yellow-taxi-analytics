@@ -52,11 +52,7 @@ All services run in containers and communicate via Docker Compose's internal net
    - Start Airflow on port **8080** ([http://localhost:8080](http://localhost:8080))
    - Start Streamlit dashboard on port **8501** ([http://localhost:8501](http://localhost:8501))
 
-3. **Access the apps**
-   - **Airflow UI:** [http://localhost:8080](http://localhost:8080)
-   - **Streamlit Dashboard:** [http://localhost:8501](http://localhost:8501)
-
-4. **Stop all services**
+3. **Stop all services**
    ```sh
    docker-compose down
    ```
@@ -88,13 +84,22 @@ All services run in containers and communicate via Docker Compose's internal net
 - If you get port conflicts, change the host port in `docker-compose.yml`.
 - If you update dependencies, rebuild with `docker-compose up --build`.
 - For ARM servers, a custom Dockerfile is used for Streamlit to ensure compatibility.
+- docker.errors.DockerException: Error while fetching server API version: Not supported URL scheme http+docker:
+```sh
+#Uninstall the pip version of docker-compose:
+pip uninstall docker-compose
+pip3 uninstall docker-compose
 
----
+# Use the Docker Compose plugin (recommended for modern Docker): Check if you have the new plugin:
+docker compose version
 
-## **License**
+# If this work, use:
+docker compose up --build 
 
-MIT
+# If you need to install the plugin:
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
 
----
-
-**Happy analyzing!**
+# Then use:
+docker compose up --build
+```
