@@ -1,7 +1,7 @@
 FROM python:3.9-slim
 
-# Install build tools and libraries for numpy/pandas on ARM
-RUN apt-get update && apt-get install -y build-essential libatlas-base-dev
+# Install build tools and runtime libraries for numpy/pandas on ARM
+RUN apt-get update && apt-get install -y build-essential libatlas3-base
 
 WORKDIR /app
 COPY . /app
