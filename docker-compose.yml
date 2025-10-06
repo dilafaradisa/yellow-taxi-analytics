@@ -1,0 +1,40 @@
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  airflow:
+    image: apache/airflow:2.9.0
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    depends_on:
+      - postgres
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+      - ./scripts:/opt/airflow/scripts
+    ports:
+      - "8080:8080"
+    command: standalone
+    
+  streamlit:
+    image: python:3.9
+    working_dir: /app
+    volumes:
+      - ./streamlit-app:/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - postgres
+    command: >
+      sh -c "pip install streamlit pandas sqlalchemy psycopg2-binary && streamlit run dashboard.py --server.address=0.0.0.0"
