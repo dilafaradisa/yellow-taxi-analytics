@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 # --------------------------------------------
 # 1️⃣ KONFIGURASI DATABASE
 # --------------------------------------------
-DB_HOST = "localhost"      # kalau Streamlit jalan di host
-DB_PORT = "5433"
+DB_HOST = "postgres"      # kalau Streamlit jalan di host
+DB_PORT = "5432"
 DB_NAME = "airflow"
 DB_USER = "airflow"
 DB_PASS = "airflow"

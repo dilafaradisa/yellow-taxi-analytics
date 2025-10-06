@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 
@@ -28,7 +28,8 @@ services:
     command: standalone
     
   streamlit:
-    image: python:3.9
+    # to use by armbian
+    image: python:3.9-slim
     working_dir: /app
     volumes:
       - ./streamlit-app:/app
