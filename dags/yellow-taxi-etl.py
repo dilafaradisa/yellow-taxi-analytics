@@ -23,7 +23,7 @@ def _extract():
             f.write(chunk)
 
 def _transform():
-    """transform data: ubah string->datetime, tambah col hari"""
+    """transform data: ubah string->datetime, tambah column hari"""
 
     df = pd.read_parquet(RAW_FILE, engine="pyarrow")
     
@@ -32,21 +32,23 @@ def _transform():
     
     df["pickup_day"] = df["tpep_pickup_datetime"].dt.day_name()
     
-    df.to_csv(TRANSFORMED_FILE, index=False)
+    df.to_parquet(TRANSFORMED_FILE, index=False)
 
 def _load():
-    """load data ke postgres"""
+    """load data (parquet) ke postgres"""
 
-    df = pd.read_csv(TRANSFORMED_FILE)
+    df = pd.read_parquet(TRANSFORMED_FILE, engine="pyarrow")
     engine = create_engine(POSTGRES_CONN)
     
     # Simpan ke table "yellow_taxi" (replace biar gampang coba-coba)
     # df.to_sql("yellow_taxi", engine, if_exists="replace", index=False)
 
-    for chunk in pd.read_csv(TRANSFORMED_FILE, chunksize=100000):
+    # df.to_sql("yellow_taxi", engine, if_exists="append", index=False)
+    for i in range(0, len(df), 50000): 
+        chunk = df.iloc[i:i+50000]
         chunk.to_sql("yellow_taxi", engine, if_exists="append", index=False)
 
-    print("✅ Data loaded to Postgres table: yellow_taxi")
+    print("Data loaded to Postgres table: yellow_taxi")
 
 
 @dag( 

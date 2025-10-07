@@ -6,6 +6,11 @@ Yellow Taxi Trip Records could download from: https://www.nyc.gov/site/tlc/about
 
 ps: you need to convert from .parquet to .csv in order to make this work
 
+This project is designed to work on:
+- **Linux (x86_64 and ARM, including Armbian)**
+- **macOS (Intel and Apple Silicon/M1/M2)**
+- **Windows (with Docker Desktop)**
+
 ---
 
 ## **Project Structure**
